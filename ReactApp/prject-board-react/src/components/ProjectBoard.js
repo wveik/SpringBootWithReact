@@ -1,13 +1,23 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
 import ProjectTaskItem from "./ProjectTask/ProjectTaskItem";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
+import {getBacklog} from "../actions/projectTaskActions";
 
 class ProjectBoard extends Component {
+    componentDidMount() {
+        this
+            .props
+            .getBacklog();
+    }
+
     render() {
         return (
             <div className="container">
                 <Link to="/addProjectTask" className="btn btn-primary mb-3">
-                    <i className="fas fa-plus-circle"> Create Project Task</i>
+                    <i className="fas fa-plus-circle">
+                        Create Project Task</i>
                 </Link>
                 <br/>
                 <hr/>
@@ -35,7 +45,7 @@ class ProjectBoard extends Component {
                                     <h3>Done</h3>
                                 </div>
                             </div>
-                           
+
                         </div>
                     </div>
                 </div>
@@ -44,4 +54,11 @@ class ProjectBoard extends Component {
     }
 }
 
-export default ProjectBoard;
+ProjectBoard.propTypes = {
+    getBacklog: PropTypes.func.isRequired,
+    project_tasks: PropTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({project_tasks: state.project_task});
+
+export default connect(mapStateToProps, {getBacklog})(ProjectBoard);
