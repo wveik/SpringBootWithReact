@@ -13,6 +13,45 @@ class ProjectBoard extends Component {
     }
 
     render() {
+        const {project_tasks} = this.props.project_tasks;
+
+        let BoardContent;
+        let todoItems = [];
+        let inProgressItems = [];
+        let doneItems = [];
+
+        const BoardAlgorithm = project_tasks => {
+            if (project_tasks.length < 1) {
+                return (
+                    <div className="alert alert-info text-center" role="alert">
+                        No Project Tasks on this board
+                    </div>
+                );
+            } else {
+                const tasks = project_tasks.map(project_task => (<ProjectTaskItem key={project_task.id} project_task={project_task}/>));
+
+                console.log(project_tasks);
+
+                for (let i = 0; i < tasks.length; i++) {
+                    let status = tasks[i].props.project_task.status;
+
+                    if (status === "TO_DO") {
+                        todoItems.push(tasks[i]);
+                    }
+
+                    if (status === "IN_PROGRESS") {
+                        inProgressItems.push(tasks[i]);
+                    }
+
+                    if (status === "DONE") {
+                        doneItems.push(tasks[i]);
+                    }
+                }
+            }
+        };
+
+        BoardAlgorithm(project_tasks);
+
         return (
             <div className="container">
                 <Link to="/addProjectTask" className="btn btn-primary mb-3">
@@ -29,7 +68,7 @@ class ProjectBoard extends Component {
                                     <h3>TO DO</h3>
                                 </div>
                             </div>
-                            <ProjectTaskItem/>
+                            {todoItems}
                         </div>
                         <div className="col-md-4">
                             <div className="card text-center mb-2">
@@ -37,7 +76,7 @@ class ProjectBoard extends Component {
                                     <h3>In Progress</h3>
                                 </div>
                             </div>
-                            <ProjectTaskItem/>
+                            {inProgressItems}
                         </div>
                         <div className="col-md-4">
                             <div className="card text-center mb-2">
@@ -45,7 +84,7 @@ class ProjectBoard extends Component {
                                     <h3>Done</h3>
                                 </div>
                             </div>
-
+                            {doneItems}
                         </div>
                     </div>
                 </div>
